@@ -3,7 +3,7 @@ import folium
 import os
 from folium.features import GeoJsonTooltip, GeoJsonPopup
 
-geojson_folder = "G:/GIS/Vijay/GeoJson"
+geojson_folder = "G:/GIS/GeoJson"
 
 geojson_files = [
     "State Boundary.geojson",
@@ -19,14 +19,12 @@ center = [sample_gdf.geometry.centroid.y.mean(), sample_gdf.geometry.centroid.x.
 m = folium.Map(location=center, zoom_start=12, tiles=None)
 folium.TileLayer('OpenStreetMap', name='OpenStreetMap', control=True).add_to(m)
 
-# Default styles (just initial)
 default_styles = {
     "State Boundary.geojson": {"color": "#aef0ae", "opacity": 0.1, "weight": 3},
     "District Boudaries.geojson": {"color": "#BCEEE3", "opacity": 0.1, "weight": 1.25},
     "Gram Panchayath.geojson": {"color": "#c59fe4", "opacity": 0.6, "weight": 1}
 }
 
-# We'll keep a reference to layer names so JS can access them
 layer_names = []
 
 for file in geojson_files:
@@ -67,10 +65,8 @@ for file in geojson_files:
     )
     gj.add_to(m)
 
-# Add Layer Control
 folium.LayerControl().add_to(m)
 
-# Add HTML/JS for frontend color & opacity pickers with JS to update styles live
 color_picker_html = """
 <div id="style-controls" style="position: fixed; top: 10px; right: 10px; z-index:9999; background: white; padding: 10px; border: 2px solid #ccc; max-width: 280px;">
 <h4>Customize Layer Styles</h4>
@@ -147,7 +143,6 @@ color_picker_html = """
 </script>
 """
 
-# Replace placeholders with actual data from Python
 import json
 color_picker_html = color_picker_html.replace(
     '{% layer_names_json %}', json.dumps(layer_names)
@@ -161,6 +156,6 @@ m.get_root().html.add_child(folium.Element(color_picker_html))
 
 folium.LayerControl().add_to(m)
 
-output_path = "G:/GIS/Vijay/GeoJson/Result_1.html"
+output_path = "G:/GIS/GeoJson/Result_1.html"
 m.save(output_path)
 print(f"Map saved to: {output_path}")
